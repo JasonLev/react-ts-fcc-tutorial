@@ -5,11 +5,26 @@ import { Input } from './Input'
 
 export const AddTodo = () => {
   const [todo, setTodo] = useState<string>('')
+  const [todos, setTodos] = useState<string[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
+  const handleSubmission = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (todo.trim() !== '') {
+      setTodos([...todos, todo])
+      setTodo('')
+    }
+  }
   return (
-    <form>
+    <form onSubmit={handleSubmission}>
       <div className="flex items-center w-full max-w-lg gap-2 p-5 m-auto">
-        <input
+        <Input
+          ref={inputRef}
           value={todo}
           onChange={e => setTodo(e.target.value)}
           type="text"
